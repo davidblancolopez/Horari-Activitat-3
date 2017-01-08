@@ -176,14 +176,16 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
      * @return
      */
     public String professor(String codiAsignatura){
-        String nomProfessor;
+        String nomProfessor = "";
 
 
-        Cursor c = db.rawQuery("SELECT nom_professor FROM professors WHERE " + codiAsignatura +  " LIKE id_professor", null);
+        Cursor c = db.rawQuery("SELECT nom_professor FROM professors WHERE ('" + codiAsignatura +  "' LIKE id_professor)", null);
 
-        c.moveToFirst();
-
-        nomProfessor = c.getString(1);
+        if (c.moveToFirst()) {
+            do {
+                nomProfessor = c.getString(1);
+            }while(c.moveToNext());
+        }
 
         return nomProfessor;
     }
@@ -196,14 +198,16 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
      * @return
      */
     public String assignatura(String codiAsignatura){
-        String nomAssignatura;
+        String nomAssignatura = "";
 
 
         Cursor c = db.rawQuery("SELECT nom_asignatura FROM asignatura WHERE " + codiAsignatura + " LIKE id_professor", null);
 
-        c.moveToFirst();
-
-        nomAssignatura = c.getString(1);
+        if (c.moveToFirst()) {
+            do {
+                nomAssignatura = c.getString(1);
+            }while(c.moveToNext());
+        }
 
         return nomAssignatura;
     }
