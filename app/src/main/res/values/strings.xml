@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Activitat-3-ANDROID</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="actualizar">Actualizar</string>
+    <string name="mensaje"></string>
+    <string name="hora"></string>
+    <string name="config">Configuración</string>
+    <string name="clase">Clase: </string>
+    <string name="Aceptar">Aceptar</string>
+
+
+    <string-array name="clase">
+        <item>A1</item>
+        <item>A2</item>
+    </string-array>
+
+
+    <string-array name="color">
+        <item>Vermell</item>
+        <item>Blau</item>
+        <item>Verd</item>
+        <item>Groc</item>
+        <item>Taronja</item>
+        <item>Violeta</item>
+        <item>Rosa</item>
+        <item>Blanc</item>
+    </string-array>
+
+
+    <string name="color">Color: </string>
+
+</resources>
