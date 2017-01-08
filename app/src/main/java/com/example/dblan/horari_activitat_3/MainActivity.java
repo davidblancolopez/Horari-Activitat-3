@@ -33,18 +33,15 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         setContentView(R.layout.activity_main);
 
 
-
+        //Crea la base de datos.
         BDCreador dataBase =
                 new BDCreador(this, "BDHorarios", null, 1);
         db = dataBase.getWritableDatabase();
 
-        //Es crea la Base de dades.
-        /*BDCreador BD = new BDCreador(this, "BBDD", null, 1);
-        db = BD.getWritableDatabase();*/
 
 
 
-
+        //Recogemos los datos del archivo de configuración.
         SharedPreferences prefs =
                 getSharedPreferences("configuracio", Context.MODE_PRIVATE);
 
@@ -52,7 +49,7 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         String colorFondo = prefs.getString("colorFondo", "Verd");
 
 
-
+        //Se aplica el color de fondo automaticamente.
         switch (colorFondo)
         {
             case "Vermell":
@@ -119,15 +116,16 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
      */
     public void consultaWidget(){
 
-        String[] args = new String[]{horaActual, grup, diaSetmana};
-        Cursor c = db.rawQuery("SELECT * FROM horari WHERE ? BETWEEN hora_inici AND hora_fi AND grup = ? AND dia_setmana = ?", args);
 
-        c.moveToFirst();
-        do{
-            codiAsignatura = c.getString(2);
-            horaInici = c.getString(3);
-            horaFi = c.getString(4);
-        }while(c.moveToNext());
+        Cursor c = db.rawQuery("SELECT * FROM horari WHERE " + "('" + horaActual + "' BETWEEN hora_inici AND hora_fi) AND (grup = '" + grup + "') AND (dia_setmana = '" + diaSetmana + "')", null);
+
+        if (c.moveToFirst()) {
+            do {
+                codiAsignatura = c.getString(2);
+                horaInici = c.getString(3);
+                horaFi = c.getString(4);
+            } while (c.moveToNext());
+        }
 
     }
 
@@ -141,22 +139,31 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
     public String diaSetmana(){
         int dia = 0;
-        String diaSetmana;
-
-        String[] setmana = new String[]{
-                "Domingo",
-                "Lunes",
-                "Martes",
-                "Miercoles",
-                "Jueves",
-                "Viernes",
-                "Sabado"};
+        String diaSetmana = "";
 
         Calendar cal = Calendar.getInstance();
 
-        dia = cal.get(Calendar.DAY_OF_WEEK);
+        dia = cal.get(Calendar.DAY_OF_WEEK) - 1;
 
-        diaSetmana = setmana[dia - 1];
+        switch (dia) {
+            case 1:
+                diaSetmana = "Lunes";
+                break;
+            case 2:
+                diaSetmana = "Martes";
+                break;
+            case 3:
+                diaSetmana = "Miercoles";
+                break;
+            case 4:
+                diaSetmana = "Jueves";
+                break;
+            case 5:
+                diaSetmana = "Viernes";
+                break;
+        }
+
+
 
         return diaSetmana;
     }
@@ -171,12 +178,12 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     public String professor(String codiAsignatura){
         String nomProfessor;
 
-        String[] args = new String[]{codiAsignatura};
-        Cursor c = db.rawQuery("SELECT nom_professor FROM professors WHERE ? LIKE id_professor", args);
+
+        Cursor c = db.rawQuery("SELECT nom_professor FROM professors WHERE " + codiAsignatura +  " LIKE id_professor", null);
 
         c.moveToFirst();
 
-        nomProfessor = c.getString(0);
+        nomProfessor = c.getString(1);
 
         return nomProfessor;
     }
@@ -191,12 +198,12 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     public String assignatura(String codiAsignatura){
         String nomAssignatura;
 
-        String[] args = new String[]{codiAsignatura};
-        Cursor c = db.rawQuery("SELECT asignatura FROM asignatura WHERE ? LIKE id_professor", args);
+
+        Cursor c = db.rawQuery("SELECT nom_asignatura FROM asignatura WHERE " + codiAsignatura + " LIKE id_professor", null);
 
         c.moveToFirst();
 
-        nomAssignatura = c.getString(0);
+        nomAssignatura = c.getString(1);
 
         return nomAssignatura;
     }
@@ -218,9 +225,9 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         consultaWidget();
 
-        //profesor = professor(codiAsignatura);
+        profesor = professor(codiAsignatura);
 
-        //nomAsignatura = assignatura(codiAsignatura);
+        nomAsignatura = assignatura(codiAsignatura);
 
     }
 
